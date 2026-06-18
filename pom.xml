@@ -6,7 +6,7 @@
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
         <version>3.5.14</version>
-        <relativePath/> <!-- lookup parent from repository -->
+        <relativePath/>
     </parent>
     <groupId>com.tecsup</groupId>
     <artifactId>minishop</artifactId>
@@ -28,6 +28,8 @@
     </scm>
     <properties>
         <java.version>17</java.version>
+        <sonar.organization>diegoaragonmurillo-sys</sonar.organization>
+        <sonar.projectKey>diegoaragonmurillo-sys_Lab12CPS</sonar.projectKey>
         <sonar.host.url>https://sonarcloud.io</sonar.host.url>
         <sonar.coverage.jacoco.xmlReportPaths>
             ${project.build.directory}/site/jacoco/jacoco.xml
@@ -42,7 +44,6 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
-
         <dependency>
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>

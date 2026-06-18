@@ -42,10 +42,10 @@ jobs:
         run: >
           mvn sonar:sonar
           --no-transfer-progress
-          -Dsonar.projectKey=Lab12CPS
-          -Dsonar.organization=diegoaragonmurillo-sys
+          -Dsonar.projectKey=${{ secrets.SONAR_PROJECT_KEY }}
+          -Dsonar.organization=${{ secrets.SONAR_ORG }}
 
-      - name: 7 - Publicar reporte de pruebas
+      - name: 7 - Publicar reporte de pruebas y cobertura
         uses: actions/upload-artifact@v4
         if: always()
         with:
