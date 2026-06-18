@@ -82,21 +82,21 @@ class ProductControllerIntegrationTest {
 
     @Test
     @DisplayName("GET /api/products/{id} — debe retornar error cuando el ID no existe")
-    void shouldReturnErrorWhenProductNotFound() {
+    void shouldReturnErrorWhenProductNotFound() throws Exception {
         // ACT & ASSERT
-        org.assertj.core.api.Assertions.assertThatThrownBy(() ->
-                mockMvc.perform(get("/api/products/9999"))
-        ).hasCauseInstanceOf(RuntimeException.class);
+        // Al buscar un ID inválido, MockMvc simplemente debe esperar el error que maneje la app
+        mockMvc.perform(get("/api/products/9999"))
+                .andExpect(status().isInternalServerError());
     }
 
     @Test
     @DisplayName("POST /api/products — debe retornar error si el cuerpo está vacío (Cobertura)")
-    void shouldReturnErrorWhenBodyIsEmpty() {
+    void shouldReturnErrorWhenBodyIsEmpty() throws Exception {
         // ACT & ASSERT
-        org.assertj.core.api.Assertions.assertThatThrownBy(() ->
-                mockMvc.perform(post("/api/products")
+        // Al enviar un JSON vacío, el servidor web responderá un Bad Request (400) de forma estándar
+        mockMvc.perform(post("/api/products")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(""))
-        ).hasCauseInstanceOf(RuntimeException.class);
+                .andExpect(status().isBadRequest());
     }
 }
