@@ -5,10 +5,6 @@ import com.tecsup.minishop.repository.ProductRepository;
 import org.springframework.stereotype.Service;
 import java.util.List;
 
-import com.tecsup.minishop.model.Product;
-import com.tecsup.minishop.repository.ProductRepository;
-import org.springframework.stereotype.Service;
-import java.util.List;
 
 @Service
 public class ProductService {
