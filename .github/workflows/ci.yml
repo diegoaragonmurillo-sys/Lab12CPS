@@ -43,7 +43,7 @@ jobs:
           mvn sonar:sonar
           --no-transfer-progress
           -Dsonar.projectKey=Lab12CPS
-          -Dsonar.organization=diegoaragon77
+          -Dsonar.organization=diegoaragonmurillo-sys
 
       - name: 7 - Publicar reporte de pruebas
         uses: actions/upload-artifact@v4
