@@ -20,10 +20,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
 class ProductControllerIntegrationTest {
+
     @Autowired
     private MockMvc mockMvc;
+
     @Autowired
     private ProductRepository productRepository;
+
     @Autowired
     private ObjectMapper objectMapper;
 
@@ -76,10 +79,19 @@ class ProductControllerIntegrationTest {
 
     @Test
     @DisplayName("GET /api/products/{id} — debe retornar error cuando el ID no existe")
-    void shouldReturn500WhenProductNotFound() {
-        // ACT & ASSERT
-        org.assertj.core.api.Assertions.assertThatThrownBy(() ->
-                mockMvc.perform(get("/api/products/9999"))
-        ).hasCauseInstanceOf(RuntimeException.class);
+    void shouldReturnErrorWhenProductNotFound() throws Exception {
+        // ACT & ASSERT (Hacer la petición de forma directa para que MockMvc capture el error de la app)
+        mockMvc.perform(get("/api/products/9999"))
+                .andExpect(status().isInternalServerError());
+    }
+
+    @Test
+    @DisplayName("POST /api/products — debe retornar error si el cuerpo está vacío (Cobertura)")
+    void shouldReturnBadRequestWhenBodyIsEmpty() throws Exception {
+        // ACT & ASSERT (Enviamos un body vacío para activar la línea de Objects.requireNonNull)
+        mockMvc.perform(post("/api/products")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(""))
+                .andExpect(status().isBadRequest());
     }
 }
