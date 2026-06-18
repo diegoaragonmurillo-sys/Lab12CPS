@@ -44,6 +44,8 @@ jobs:
           --no-transfer-progress
           -Dsonar.organization=diegoaragonmurillo-sys
           -Dsonar.projectKey=diegoaragonmurillo-sys_Lab12CPS
+          -Dsonar.java.coveragePlugin=jacoco
+          -Dsonar.coverage.jacoco.xmlReportPaths=target/site/jacoco/jacoco.xml
 
       - name: 7 - Publicar reporte de pruebas y cobertura
         uses: actions/upload-artifact@v4
