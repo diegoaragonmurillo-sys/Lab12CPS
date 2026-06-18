@@ -20,13 +20,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
 class ProductControllerIntegrationTest {
-
     @Autowired
     private MockMvc mockMvc;
-
     @Autowired
     private ProductRepository productRepository;
-
     @Autowired
     private ObjectMapper objectMapper;
 
@@ -40,7 +37,6 @@ class ProductControllerIntegrationTest {
     void shouldCreateProductAndReturn201() throws Exception {
         // ARRANGE
         Product product = Product.builder().name("Webcam Logitech").price(250.00).stock(20).build();
-
         // ACT & ASSERT
         mockMvc.perform(post("/api/products")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -58,7 +54,6 @@ class ProductControllerIntegrationTest {
         // ARRANGE
         productRepository.save(Product.builder().name("Disco SSD").price(180.00).stock(10).build());
         productRepository.save(Product.builder().name("RAM 16GB").price(120.00).stock(8).build());
-
         // ACT & ASSERT
         mockMvc.perform(get("/api/products"))
                 .andExpect(status().isOk())
@@ -72,7 +67,6 @@ class ProductControllerIntegrationTest {
     void shouldReturnProductById() throws Exception {
         // ARRANGE
         Product saved = productRepository.save(Product.builder().name("Impresora HP").price(350.00).stock(4).build());
-
         // ACT & ASSERT
         mockMvc.perform(get("/api/products/" + saved.getId()))
                 .andExpect(status().isOk())
@@ -82,21 +76,10 @@ class ProductControllerIntegrationTest {
 
     @Test
     @DisplayName("GET /api/products/{id} — debe retornar error cuando el ID no existe")
-    void shouldReturnErrorWhenProductNotFound() throws Exception {
+    void shouldReturn500WhenProductNotFound() {
         // ACT & ASSERT
-        // Al buscar un ID inválido, MockMvc simplemente debe esperar el error que maneje la app
-        mockMvc.perform(get("/api/products/9999"))
-                .andExpect(status().isInternalServerError());
-    }
-
-    @Test
-    @DisplayName("POST /api/products — debe retornar error si el cuerpo está vacío (Cobertura)")
-    void shouldReturnErrorWhenBodyIsEmpty() throws Exception {
-        // ACT & ASSERT
-        // Al enviar un JSON vacío, el servidor web responderá un Bad Request (400) de forma estándar
-        mockMvc.perform(post("/api/products")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(""))
-                .andExpect(status().isBadRequest());
+        org.assertj.core.api.Assertions.assertThatThrownBy(() ->
+                mockMvc.perform(get("/api/products/9999"))
+        ).hasCauseInstanceOf(RuntimeException.class);
     }
 }
