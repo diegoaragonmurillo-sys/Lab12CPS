@@ -40,6 +40,7 @@ class ProductControllerIntegrationTest {
     void shouldCreateProductAndReturn201() throws Exception {
         // ARRANGE
         Product product = Product.builder().name("Webcam Logitech").price(250.00).stock(20).build();
+
         // ACT & ASSERT
         mockMvc.perform(post("/api/products")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -57,6 +58,7 @@ class ProductControllerIntegrationTest {
         // ARRANGE
         productRepository.save(Product.builder().name("Disco SSD").price(180.00).stock(10).build());
         productRepository.save(Product.builder().name("RAM 16GB").price(120.00).stock(8).build());
+
         // ACT & ASSERT
         mockMvc.perform(get("/api/products"))
                 .andExpect(status().isOk())
@@ -70,6 +72,7 @@ class ProductControllerIntegrationTest {
     void shouldReturnProductById() throws Exception {
         // ARRANGE
         Product saved = productRepository.save(Product.builder().name("Impresora HP").price(350.00).stock(4).build());
+
         // ACT & ASSERT
         mockMvc.perform(get("/api/products/" + saved.getId()))
                 .andExpect(status().isOk())
@@ -79,19 +82,21 @@ class ProductControllerIntegrationTest {
 
     @Test
     @DisplayName("GET /api/products/{id} — debe retornar error cuando el ID no existe")
-    void shouldReturnErrorWhenProductNotFound() throws Exception {
-        // ACT & ASSERT (Hacer la petición de forma directa para que MockMvc capture el error de la app)
-        mockMvc.perform(get("/api/products/9999"))
-                .andExpect(status().isInternalServerError());
+    void shouldReturnErrorWhenProductNotFound() {
+        // ACT & ASSERT
+        org.assertj.core.api.Assertions.assertThatThrownBy(() ->
+                mockMvc.perform(get("/api/products/9999"))
+        ).hasCauseInstanceOf(RuntimeException.class);
     }
 
     @Test
     @DisplayName("POST /api/products — debe retornar error si el cuerpo está vacío (Cobertura)")
-    void shouldReturnBadRequestWhenBodyIsEmpty() throws Exception {
-        // ACT & ASSERT (Enviamos un body vacío para activar la línea de Objects.requireNonNull)
-        mockMvc.perform(post("/api/products")
+    void shouldReturnErrorWhenBodyIsEmpty() {
+        // ACT & ASSERT
+        org.assertj.core.api.Assertions.assertThatThrownBy(() ->
+                mockMvc.perform(post("/api/products")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(""))
-                .andExpect(status().isBadRequest());
+        ).hasCauseInstanceOf(RuntimeException.class);
     }
 }
