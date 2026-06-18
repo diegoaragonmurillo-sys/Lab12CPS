@@ -42,7 +42,7 @@ jobs:
         run: >
           mvn sonar:sonar
           --no-transfer-progress
-          -Dsonar.projectKey=DiegoAragon77_minishop
+          -Dsonar.projectKey=Lab12CPS
 
       - name: 7 - Publicar reporte de pruebas
         uses: actions/upload-artifact@v4
